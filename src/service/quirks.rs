@@ -33,6 +33,7 @@ pub struct Quirk {
     pub device_type: DeviceType,
     pub platform_temperature_sensor_units: Option<TemperatureUnits>,
     pub platform_humidity_sensor_units: Option<HumidityUnits>,
+    pub platform_PM_2_5_sensor_units: Option<int>,
     /// If true, we can correctly parse all appropriate
     /// packets from the MQTT subscription and apply
     /// their state.
@@ -58,6 +59,7 @@ impl Quirk {
             device_type,
             platform_temperature_sensor_units: None,
             platform_humidity_sensor_units: None,
+            platform_PM_2_5_sensor_units: None,
             iot_api_supported: false,
             show_as_preset_buttons: None,
         }
@@ -104,6 +106,11 @@ impl Quirk {
 
     pub fn with_platform_humidity_sensor_units(mut self, units: HumidityUnits) -> Self {
         self.platform_humidity_sensor_units = Some(units);
+        self
+    }
+
+    pub fn with_platform_PM_2_5_sensor_units(mut self, units: int) -> Self {
+        self.platform_PM_2_5_sensor_units = Some(units);
         self
     }
 
@@ -244,6 +251,11 @@ fn load_quirks() -> HashMap<String, Quirk> {
         Quirk::thermometer("H5103")
             .with_platform_temperature_sensor_units(TemperatureUnits::Fahrenheit)
             .with_platform_humidity_sensor_units(HumidityUnits::RelativePercent),
+        Quirk::thermometer("H5106")
+            .with_iot_api_support(true)
+            .with_platform_temperature_sensor_units(TemperatureUnits::Fahrenheit)
+            .with_platform_humidity_sensor_units(HumidityUnits::RelativePercent)
+            .with_platform_PM_2_5_sensor_units(int),
         Quirk::thermometer("H5179")
             .with_platform_temperature_sensor_units(TemperatureUnits::Fahrenheit)
             .with_platform_humidity_sensor_units(HumidityUnits::RelativePercent),
